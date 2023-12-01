@@ -1,7 +1,9 @@
 import { useState } from "react";
 
-function Todo({todoData, isFinished, changeFinished}) {
-    const [finished, setFinished] = useState(isFinished)
+function Todo({todoData, isFinished, changeFinished, onDelete, onEdit}) {
+    const [finished, setFinished] = useState(isFinished);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editText, setEditText] = useState('');
     return(
         <div>
             <input 
@@ -12,9 +14,12 @@ function Todo({todoData, isFinished, changeFinished}) {
                     changeFinished(e.target.checked)
                 }}    
             />
-            {todoData}
-            <button>Edit</button>
-            <button>Delete</button>
+            {(isEditing) ? <input type="text" onChange={(e) => setEditText(e.target.value)} /> : todoData }
+            <button onClick={() => {
+                setIsEditing(!isEditing);
+                onEdit(editText)
+            }}>{(!isEditing ? 'Edit' : 'Save')}</button>
+            <button onClick={onDelete}>Delete</button>
         </div>
     )
 }
